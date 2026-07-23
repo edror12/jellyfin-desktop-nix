@@ -12,12 +12,15 @@
   git,
 
   cef,
+  python3,
 
   ffmpeg,
   mpv,
   libplacebo,
   libGL,
   libxkbcommon,
+  libass,
+  llvmPackages,
   wayland,
   pipewire,
   alsa-lib
@@ -40,6 +43,10 @@ rustPlatform.buildRustPackage rec {
   cargoRoot = "src";
   cargoHash = "sha256-b71LONOnoYDq/e60foYA9H2waRJuhORKNxz5GXsplr8=";
 
+  patchPhase = ''
+  patchShebangs third_party/mpv
+  '';
+
   buildPhase = ''
       cargo run \
       --release \
@@ -55,6 +62,8 @@ rustPlatform.buildRustPackage rec {
     meson
     ninja
     cmake
+    python3
+    llvmPackages.clang
   ];
 
   buildInputs = [
@@ -63,6 +72,7 @@ rustPlatform.buildRustPackage rec {
       libplacebo
       libGL
       libxkbcommon
+      libass
       wayland
       pipewire
       alsa-lib
