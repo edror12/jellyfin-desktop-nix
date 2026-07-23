@@ -2,32 +2,37 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchgit,
 
   pkg-config,
   just,
+  meson,
+  ninja,
+  cmake,
   git,
 
   cef,
 
   ffmpeg,
   mpv,
+  libplacebo,
   libGL,
   libxkbcommon,
   wayland,
   pipewire,
-  alsa-lib,
+  alsa-lib
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jellyfin-desktop";
   version = "git";
 
+  CEF_PATH = "${cef}";
+
   # During development we'll point this at a local checkout.
-  src = fetchFromGitHub {
-      owner = "andrewrabert";
-      repo = "jellium-desktop";
-      rev = "main";
-      hash = "sha256-HyTO5waNIDZOXewjxaqBxFxqlop9zqToJWmQ7pVthR8=";
+  src = fetchgit {
+      url = "https://github.com/andrewrabert/jellium-desktop.git";
+      hash = "sha256-FOz4mxsKminTtWul6BXRI0V0uBqXUeSEGziQTjxnHYs=";
       fetchSubmodules = true;
     };
 
@@ -35,31 +40,32 @@ rustPlatform.buildRustPackage rec {
   cargoRoot = "src";
   cargoHash = "sha256-b71LONOnoYDq/e60foYA9H2waRJuhORKNxz5GXsplr8=";
 
-  preBuild = ''
-      export CEF_PATH=${cef}
-  '';
-
   buildPhase = ''
-      cargo build \
+      cargo run \
       --release \
-      --manifest-path src/Cargo.toml
-      '';
+      --manifest-path src/xtask/Cargo.toml \
+      -- build --cef-path ${cef}
+  '';
 
   doCheck = false;
 
   nativeBuildInputs = [
     pkg-config
     just
+    meson
+    ninja
+    cmake
   ];
 
   buildInputs = [
-    ffmpeg
-    mpv
-    libGL
-    libxkbcommon
-    wayland
-    pipewire
-    alsa-lib
+      ffmpeg
+      mpv
+      libplacebo
+      libGL
+      libxkbcommon
+      wayland
+      pipewire
+      alsa-lib
   ];
 
   meta = with lib; {
