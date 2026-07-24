@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   fetchgit,
+  autoPatchelfHook,
 
   pkg-config,
   just,
@@ -20,10 +21,52 @@
   libGL,
   libxkbcommon,
   libass,
+  libxcb,
   llvmPackages,
   wayland,
   pipewire,
-  alsa-lib
+  alsa-lib,
+
+glib,
+  nspr,
+  nss,
+  atk,
+  at-spi2-atk,
+  at-spi2-core,
+  dbus,
+  cups,
+  mesa,
+  expat,
+  cairo,
+  pango,
+  systemd,
+  fontconfig,
+  freetype,
+  pixman,
+  fribidi,
+  harfbuzz,
+  libthai,
+  libdrm,
+  avahi,
+  gnutls,
+  libxml2,
+  bzip2,
+  brotli,
+  libdatrie,
+  graphite2,
+  xz,
+  p11-kit,
+  libidn2,
+  libunistring,
+  libtasn1,
+  nettle,
+  gmp,
+  zlib,
+  util-linux,
+  libffi,
+  pcre2,
+
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,6 +74,7 @@ rustPlatform.buildRustPackage rec {
   version = "git";
 
   CEF_PATH = "${cef}";
+  LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
 
   # During development we'll point this at a local checkout.
   src = fetchgit {
@@ -54,6 +98,12 @@ rustPlatform.buildRustPackage rec {
       -- build --cef-path ${cef}
   '';
 
+  postFixup = ''
+      patchelf \
+      --set-rpath "${lib.makeLibraryPath buildInputs}:$out" \
+      $out/libcef.so
+      '';
+
   doCheck = false;
 
   nativeBuildInputs = [
@@ -64,6 +114,7 @@ rustPlatform.buildRustPackage rec {
     cmake
     python3
     llvmPackages.clang
+    autoPatchelfHook
   ];
 
   buildInputs = [
@@ -73,9 +124,41 @@ rustPlatform.buildRustPackage rec {
       libGL
       libxkbcommon
       libass
+      libxcb
       wayland
       pipewire
       alsa-lib
+
+      # CEF dependencies
+      glib
+      nspr
+      nss
+
+      atk
+      at-spi2-atk
+
+      dbus
+      cups
+
+      xorg.libX11
+      xorg.libXcomposite
+      xorg.libXdamage
+      xorg.libXext
+      xorg.libXfixes
+      xorg.libXrandr
+      xorg.libxcb
+      xorg.libXau
+      xorg.libXrender
+      xorg.libXi
+
+      libdrm
+      expat
+      cairo
+      pango
+      fontconfig
+      freetype
+      harfbuzz
+      systemd   # provides libudev
   ];
 
   meta = with lib; {

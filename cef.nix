@@ -1,4 +1,69 @@
-{ fetchurl, stdenv, bzip2 }:
+{
+fetchurl,
+stdenv,
+bzip2,
+  python3,
+
+  ffmpeg,
+  mpv,
+  libplacebo,
+  libGL,
+  libxkbcommon,
+  libass,
+  libxcb,
+  llvmPackages,
+  wayland,
+  pipewire,
+  alsa-lib,
+
+autoPatchelfHook,
+glib,
+  nspr,
+  nss,
+  atk,
+  at-spi2-atk,
+  at-spi2-core,
+  dbus,
+  cups,
+  mesa,
+  expat,
+  cairo,
+  pango,
+  systemd,
+  fontconfig,
+  freetype,
+  pixman,
+  fribidi,
+  harfbuzz,
+  libthai,
+  libdrm,
+  avahi,
+  gnutls,
+  libxml2,
+  brotli,
+  libdatrie,
+  graphite2,
+  xz,
+  p11-kit,
+  libidn2,
+  libunistring,
+  libtasn1,
+  nettle,
+  gmp,
+  zlib,
+  util-linux,
+  libffi,
+  pcre2,
+libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxrandr,
+  libxi,
+
+
+  xorg,
+}:
 
 stdenv.mkDerivation {
   pname = "cef";
@@ -11,7 +76,33 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     bzip2
+    autoPatchelfHook
   ];
+  buildInputs = [
+  glib
+  nspr
+  nss
+  atk
+  at-spi2-atk
+  at-spi2-core
+  dbus
+  cups
+  alsa-lib
+  mesa
+  expat
+  cairo
+  pango
+  libdrm
+  libxkbcommon
+  libxcb
+  libxcomposite
+  libxdamage
+  libxext
+  libxfixes
+  libxrandr
+  libxi
+  systemd
+];
 
   unpackPhase = ''
     tar xf $src
