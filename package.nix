@@ -19,13 +19,10 @@
   mpv,
   libplacebo,
   libGL,
-  libxkbcommon,
   libass,
   libxcb,
   llvmPackages,
-  wayland,
-  pipewire,
-  alsa-lib,
+  libgbm,
 
 glib,
   nspr,
@@ -46,7 +43,6 @@ glib,
   fribidi,
   harfbuzz,
   libthai,
-  libdrm,
   avahi,
   gnutls,
   libxml2,
@@ -67,6 +63,38 @@ glib,
   pcre2,
 
   xorg,
+  curl,
+  libcdio,
+  libdvdnav,
+  libdvdread,
+  mujs,
+  libarchive,
+  libbluray,
+  lua,
+  rubberband,
+  SDL2,
+  libuchardet,
+  vapoursynth,
+  libXfixes,
+  zimg,
+  alsa-lib,
+  libjack2,
+  pipewire,
+  pulseaudio,
+  libcaca,
+  libdrm,
+  libdisplay-info,
+  libjpeg_turbo,
+  libsixel,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  libxkbcommon,
+  libXScrnSaver,
+  libXpresent,
+  libXrandr,
+  libva,
+  nv-codec-headers,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -115,6 +143,10 @@ rustPlatform.buildRustPackage rec {
     python3
     llvmPackages.clang
     autoPatchelfHook
+    wayland
+    wayland-scanner
+    wayland-protocols
+
   ];
 
   buildInputs = [
@@ -122,11 +154,8 @@ rustPlatform.buildRustPackage rec {
       mpv
       libplacebo
       libGL
-      libxkbcommon
       libass
       libxcb
-      wayland
-      pipewire
       alsa-lib
 
       # CEF dependencies
@@ -151,7 +180,6 @@ rustPlatform.buildRustPackage rec {
       xorg.libXrender
       xorg.libXi
 
-      libdrm
       expat
       cairo
       pango
@@ -159,6 +187,37 @@ rustPlatform.buildRustPackage rec {
       freetype
       harfbuzz
       systemd   # provides libudev
+curl
+  libcdio
+  libdvdnav
+  libdvdread
+  mujs
+  libarchive
+  libbluray
+  lua
+  rubberband
+  SDL2
+  libuchardet
+  vapoursynth
+  xorg.libXfixes
+  zimg
+  libjack2
+  pipewire
+  pulseaudio
+  libcaca
+  libdrm
+  libdisplay-info
+  libjpeg_turbo
+  libsixel
+  wayland
+  wayland-scanner
+  wayland-protocols
+  libxkbcommon
+  xorg.libXScrnSaver
+  xorg.libXpresent
+  libva
+  nv-codec-headers
+  libgbm
   ];
 
   meta = with lib; {
