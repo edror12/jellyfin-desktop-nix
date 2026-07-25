@@ -95,6 +95,8 @@ glib,
   libXrandr,
   libva,
   nv-codec-headers,
+  autoAddDriverRunpath,
+makeWrapper,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -120,19 +122,42 @@ rustPlatform.buildRustPackage rec {
   '';
 
   buildPhase = ''
+  runHook preBuild
       cargo run \
       --release \
       --manifest-path src/xtask/Cargo.toml \
       -- build --cef-path ${cef}
+      runHook postBuild
   '';
 
-  postFixup = ''
-      patchelf \
-      --set-rpath "${lib.makeLibraryPath buildInputs}:$out" \
-      $out/libcef.so
-      '';
+installPhase = ''
+  runHook preInstall
+
+  appDir="$out/lib/jellium-desktop"
+
+  mkdir -p "$appDir" "$out/bin"
+
+  install -Dm755 \
+    build/jellium-desktop \
+    "$appDir/jellium-desktop"
+
+  install -Dm755 \
+    build/libmpv.so.2 \
+    "$appDir/libmpv.so.2"
+
+  makeWrapper \
+    "$appDir/jellium-desktop" \
+    "$out/bin/jellium-desktop" \
+    --set CEF_PATH "${cef}" \
+    --prefix LD_LIBRARY_PATH : "$appDir:${cef}"
+
+  runHook postInstall
+'';
 
   doCheck = false;
+  autoPatchelfIgnoreMissingDeps = [
+  "libcef.so"
+];
 
   nativeBuildInputs = [
     pkg-config
@@ -140,9 +165,11 @@ rustPlatform.buildRustPackage rec {
     meson
     ninja
     cmake
+    git
     python3
     llvmPackages.clang
     autoPatchelfHook
+  makeWrapper
     wayland
     wayland-scanner
     wayland-protocols
@@ -150,6 +177,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
+  cef
       ffmpeg
       mpv
       libplacebo
@@ -165,6 +193,7 @@ rustPlatform.buildRustPackage rec {
 
       atk
       at-spi2-atk
+      at-spi2-core
 
       dbus
       cups
@@ -220,11 +249,11 @@ curl
   libgbm
   ];
 
-  meta = with lib; {
-    description = "Desktop client for Jellyfin";
-    homepage = "https://github.com/jellyfin/jellyfin-desktop";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    mainProgram = "jellyfin-desktop";
-  };
+meta = {
+  description = "An unofficial desktop client for Jellyfin";
+  homepage = "https://github.com/andrewrabert/jellium-desktop";
+  license = lib.licenses.gpl2Only;
+  platforms = lib.platforms.linux;
+  mainProgram = "jellium-desktop";
+};
 }
