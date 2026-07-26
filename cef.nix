@@ -1,62 +1,83 @@
 {
-  alsa-lib,
-  at-spi2-core,
-  autoPatchelfHook,
-  cairo,
-  cups,
-  dbus,
-  expat,
+  # Nix packaging and archive extraction
+  stdenv,
   fetchurl,
+  autoPatchelfHook,
+
+  # Core GLib, browser security, and IPC runtime
+  nss,
   glib,
-  libgbm,
-  libx11,
-  libxcb,
-  libxcomposite,
-  libxdamage,
+  nspr,
+  dbus,
+  systemd,
+
+  # GTK accessibility support
+  atk,
+  at-spi2-atk,
+  at-spi2-core,
+
+  # Printing and audio support
+  cups,
+  alsa-lib,
+
+  # Graphics, text rendering, and OpenGL
+  mesa,
+  pango,
+  libxkbcommon,
+
+  # X11 support
+  libxi,
   libxext,
   libxfixes,
-  libxkbcommon,
   libxrandr,
-  nspr,
-  nss,
-  pango,
-  stdenv,
-  systemd,
+  libxdamage,
+  libxcomposite,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "cef";
-  version = "150.0.10";
+  platform = "linux64";
+  version = "150.0.10+g8042e43+chromium-150.0.7871.101";
 
   src = fetchurl {
-    url = "https://cef-builds.spotifycdn.com/cef_binary_150.0.10+g8042e43+chromium-150.0.7871.101_linux64.tar.bz2";
-    hash = "sha256-ef/DVbfGbPebAmcwitTmjwBLajs1J5VkYHV3XQKgddQ=";
+    url = "https://cef-builds.spotifycdn.com/cef_binary_${version}_${platform}_minimal.tar.bz2";
+    hash = "sha256-bB1Ike84huPM9l0JKI2DBOP343JKR8kyk+K9Y+dlKOQ=";
   };
 
   nativeBuildInputs = [
+    # Modify ELFs to point to Nix Store
     autoPatchelfHook
   ];
+
   buildInputs = [
+    # Core GLib, browser security, and IPC runtime
+    nss
     glib
     nspr
-    nss
-    at-spi2-core
     dbus
+    systemd
+
+    # GTK accessibility support
+    atk
+    at-spi2-atk
+    at-spi2-core
+
+    # Printing and audio support
     cups
     alsa-lib
-    expat
-    cairo
+
+    # Graphics, text rendering, and OpenGL
+    mesa
     pango
-    libgbm
-    libx11
     libxkbcommon
-    libxcb
-    libxcomposite
-    libxdamage
+
+    # X11 support
+    libxi
     libxext
     libxfixes
     libxrandr
-    systemd
+    libxdamage
+    libxcomposite
   ];
 
   installPhase = ''
@@ -69,4 +90,5 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
 }
