@@ -67,11 +67,6 @@ stdenv.mkDerivation {
     cp -r Release/* "$out"
     cp -r Resources/* "$out"
 
-    # archive.json is required by download-cef
-    cat > "$out/archive.json" <<EOF
-    {"type":"standard","name":"cef_binary_150.0.10+g8042e43+chromium-150.0.7871.101","sha1":""}
-    EOF
-
     runHook postInstall
   '';
 }
