@@ -1,52 +1,89 @@
 {
-  alsa-lib,
-  autoPatchelfHook,
-  cef,
-  cmake,
-  curl,
-  fetchgit,
-  ffmpeg,
-  lcms2,
+  # Nix/Rust packaging helpers
   lib,
-  libGL,
-  libarchive,
+  rustPlatform,
+  fetchgit,
+  autoPatchelfHook,
+  makeWrapper,
+
+  # Bundled Chromium/CEF runtime
+  cef,
+
+  # Build tools and generators
+  git,
+  just,
+  meson,
+  ninja,
+  cmake,
+  python3,
+  pkg-config,
+  llvmPackages,
+
+  # Core media playback and codecs
+  mpv,
+  ffmpeg,
   libass,
-  libcdio,
-  libcdio-paranoia,
-  libdisplay-info,
-  libdrm,
-  libgbm,
-  libjpeg_turbo,
   libplacebo,
-  libuchardet,
-  libva,
+
+  # OpenGL/GBM and display infrastructure
+  libGL,
+  libgbm,
+  libdrm,
+  libdisplay-info,
+
+  # X11 support
   libx11,
   libxcb,
   libxext,
-  libxfixes,
-  libxkbcommon,
-  libxpresent,
   libxrandr,
+  libxfixes,
+  libxpresent,
   libxscrnsaver,
-  llvmPackages,
-  lua,
-  makeWrapper,
-  meson,
-  mujs,
-  ninja,
-  nv-codec-headers-12,
-  pipewire,
-  pkg-config,
-  pulseaudio,
-  python3,
-  rubberband,
-  rustPlatform,
-  vulkan-headers,
-  vulkan-loader,
+
+  # Wayland support
   wayland,
-  wayland-protocols,
+  libxkbcommon,
   wayland-scanner,
+  wayland-protocols,
+
+  # Hardware video acceleration
+  libva,
+  vulkan-loader,
+  vulkan-headers,
+  nv-codec-headers,
+  nv-codec-headers-12,
+
+  # Network and disc media support
+  curl,
+  libcdio,
+  libbluray,
+  libdvdnav,
+  libdvdread,
+
+  # Archive and scripting support
+  lua,
+  mujs,
+  libarchive,
+
+  # Audio processing and output
+  SDL2,
+  alsa-lib,
+  libjack2,
+  pipewire,
+  rubberband,
+  pulseaudio,
+  libcdio-paranoia,
+
+  # Image, terminal graphics, and visual output
+  lcms2,
+  libcaca,
+  libsixel,
+  libjpeg_turbo,
+
+  # Subtitle/text encoding and video filters
   zimg,
+  vapoursynth,
+  libuchardet,
 }:
 
 rustPlatform.buildRustPackage {
