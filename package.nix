@@ -6,21 +6,18 @@
   curl,
   fetchgit,
   ffmpeg,
+  lcms2,
   lib,
   libGL,
   libarchive,
   libass,
-  libbluray,
-  libcaca,
+  libcdio,
+  libcdio-paranoia,
   libdisplay-info,
   libdrm,
-  libdvdnav,
-  libdvdread,
   libgbm,
-  libjack2,
   libjpeg_turbo,
   libplacebo,
-  libsixel,
   libuchardet,
   libva,
   libx11,
@@ -44,7 +41,8 @@
   python3,
   rubberband,
   rustPlatform,
-  vapoursynth,
+  vulkan-headers,
+  vulkan-loader,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -126,20 +124,17 @@ rustPlatform.buildRustPackage {
     cef
     curl
     ffmpeg
+    lcms2
     libGL
     libarchive
     libass
-    libbluray
-    libcaca
+    libcdio
+    libcdio-paranoia
     libdisplay-info
     libdrm
-    libdvdnav
-    libdvdread
     libgbm
-    libjack2
     libjpeg_turbo
     libplacebo
-    libsixel
     libuchardet
     libva
     libx11
@@ -156,7 +151,8 @@ rustPlatform.buildRustPackage {
     pipewire
     pulseaudio
     rubberband
-    vapoursynth
+    vulkan-headers
+    vulkan-loader
     wayland
     wayland-protocols
     zimg

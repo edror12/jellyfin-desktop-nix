@@ -59,24 +59,19 @@ stdenv.mkDerivation {
     systemd
   ];
 
-  unpackPhase = ''
-    tar xf $src
-  '';
-
   installPhase = ''
-          mkdir -p $out
+    runHook preInstall
 
-          sdk=$(echo cef_binary_*)
-
-          cp -r "$sdk/include" "$out"
-
-          cp -r "$sdk/Release/"* "$out"
-
-          cp -r "$sdk/Resources/"* "$out"
+    mkdir -p "$out"
+    cp -r include "$out"
+    cp -r Release/* "$out"
+    cp -r Resources/* "$out"
 
     # archive.json is required by download-cef
-          cat > "$out/archive.json" <<EOF
-          {"type":"standard","name":"cef_binary_150.0.10+g8042e43+chromium-150.0.7871.101","sha1":""}
-      EOF
+    cat > "$out/archive.json" <<EOF
+    {"type":"standard","name":"cef_binary_150.0.10+g8042e43+chromium-150.0.7871.101","sha1":""}
+    EOF
+
+    runHook postInstall
   '';
 }
