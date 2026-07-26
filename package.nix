@@ -88,13 +88,14 @@
 
 rustPlatform.buildRustPackage {
   pname = "jellium-desktop";
-  version = "git";
+  version = "unstable-2026-07-23";
 
   CEF_PATH = "${cef}";
   LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
 
   src = fetchgit {
     url = "https://github.com/andrewrabert/jellium-desktop.git";
+    rev = "f3ba9cdcf29173d21c2384b981ba1f496a408980";
     hash = "sha256-FOz4mxsKminTtWul6BXRI0V0uBqXUeSEGziQTjxnHYs=";
     fetchSubmodules = true;
   };
