@@ -119,21 +119,21 @@ rustPlatform.buildRustPackage {
     runHook preInstall
 
     appDir="$out/lib/jellium-desktop"
-
     mkdir -p "$appDir" "$out/bin"
 
-    install -Dm755 \
-      build/jellium-desktop \
-      "$appDir/jellium-desktop"
+    install -Dm755 build/libmpv.so.2 "$appDir/libmpv.so.2"
+    install -Dm755 build/jellium-desktop "$appDir/jellium-desktop"
+    install -Dm644 resources/linux/net.nullsum.JelliumDesktop.desktop \
+                    "$out/share/applications/net.nullsum.JelliumDesktop.desktop"
+    install -Dm644 resources/linux/net.nullsum.JelliumDesktop.metainfo.xml \
+                    "$out/share/metainfo/net.nullsum.JelliumDesktop.metainfo.xml"
+    install -Dm644 resources/linux/net.nullsum.JelliumDesktop.svg \
+                    "$out/share/icons/hicolor/scalable/apps/net.nullsum.JelliumDesktop.svg"
 
-    install -Dm755 \
-      build/libmpv.so.2 \
-      "$appDir/libmpv.so.2"
-
-    makeWrapper \
-      "$appDir/jellium-desktop" \
-      "$out/bin/jellium-desktop" \
-      --set CEF_PATH "${cef}" \
+    makeWrapper                                 \
+      "$appDir/jellium-desktop"                 \
+      "$out/bin/jellium-desktop"                \
+      --set CEF_PATH "${cef}"                   \
       --prefix LD_LIBRARY_PATH : "$appDir:${cef}"
 
     runHook postInstall
